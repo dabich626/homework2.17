@@ -1,21 +1,21 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class StringListImpl implements SpringList.StringList {
+public class ListImpl implements SpringList.IntegerList {
 
-    public StringListImpl(String[] storage, int size) {
-        storage = new String[7];
+    public IntegerListImpl(Integer[] storage, int size) {
+        storage = new Integer[7];
         this.size = size;
     }
 
-    public StringListImpl (int initsize){
-        storage = new String[initsize];
+    public IntegerListImpl (int initsize){
+        storage = new Integer[initsize];
     }
 
-    private final String[] storage;
+    private final Integer[] storage;
     private int size;
     @Override
-    public String add(String item) {
+    public Integer add(Integer item) {
 
         validateSize();
         validateItem(item);
@@ -25,7 +25,7 @@ public class StringListImpl implements SpringList.StringList {
     }
 
     @Override
-    public String add(int index, String item) {
+    public Integer add(int index, Integer item) {
 
         validateSize();
         validateItem(item);
@@ -38,7 +38,7 @@ public class StringListImpl implements SpringList.StringList {
     }
 
     @Override
-    public String set(int index, String item) {
+    public Integer set(int index, Integer item) {
 
         validateIndex(index);
         validateItem(item);
@@ -48,7 +48,7 @@ public class StringListImpl implements SpringList.StringList {
     }
 
     @Override
-    public String remove(String item) {
+    public Integer remove(Integer item) {
         validateItem(item);
         int index = indexOf(item);
         if(index == -1){
@@ -61,8 +61,8 @@ public class StringListImpl implements SpringList.StringList {
     }
 
     @Override
-    public String remove(int index) {
-        String item = storage[index];
+    public Integer remove(int index) {
+        Integer item = storage[index];
 
         if(index == -1){
             throw new ElementNotFoundException();
@@ -74,15 +74,16 @@ public class StringListImpl implements SpringList.StringList {
     }
 
     @Override
-    public boolean contains(String item) {
-        return indexOf(item) != -1;
+    public boolean contains(Integer item) {
+        Integer [] storageCopy = toArray();
+        sort(storageCopy);
     }
 
     @Override
-    public int indexOf(String item) {
+    public int indexOf(Integer item) {
 
         for (int i = 0; i == size; i++) {
-String s = storage[i];
+Integer s = storage[i];
 if (s.equals(item)){
     return i;
 }
@@ -91,10 +92,10 @@ if (s.equals(item)){
     }
 
     @Override
-    public int lastIndexOf(String item) {
+    public int lastIndexOf(Integer item) {
 
         for (int i = size - 1; i >= 0; i--) {
-            String s = storage[i];
+            Integer s = storage[i];
             if (s.equals(item)){
                 return i;
             }
@@ -102,14 +103,14 @@ if (s.equals(item)){
     }}
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
 
         validateIndex(index);
         return storage[index];
     }
 
     @Override
-    public boolean equals(SpringList.StringList otherList) {
+    public boolean equals(SpringList.IntegerList otherList) {
         return Array.equals(this.toArray(),otherList.toArray());
     }
 
@@ -129,11 +130,11 @@ size = 0;
     }
 
     @Override
-    public String[] toArray() {
+    public Integer[] toArray() {
         return Arrays.copyOf(storage, size);
     }
 
-    private void validateItem (String Item){
+    private void validateItem (Integer Item){
         if (Item == null) {
             throw new NullItemException();
         }
@@ -151,5 +152,24 @@ throw new StorageIsFullException();
         if(index < 0 || index >= size){
             throw new InvalidIndexException();
         }
+    }
+
+    private void sort(int [] arr){
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swapItems(arr, j, j + 1);
+                }
+            }
+        }
+    }
+
+    private boolean binarySearch(Integer [] arr, Integer item){
+        for (int i : arr) {
+            if (i == item) {
+                return true;
+            }
+        }
+        return false;
     }
 }
