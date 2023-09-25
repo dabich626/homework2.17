@@ -27,7 +27,7 @@ public class ListImpl implements SpringList.IntegerList {
     @Override
     public Integer add(int index, Integer item) {
 
-        validateSize();
+        growIfNeeded();
         validateItem(item);
         validateIndex(index);
 
@@ -140,10 +140,10 @@ size = 0;
         }
     }
 
-    private void validateSize(){
+    private void growIfNeeded(){
 
         if (size == storage.length){
-throw new StorageIsFullException();
+grow();
         }
     }
 
@@ -155,13 +155,7 @@ throw new StorageIsFullException();
     }
 
     private void sort(int [] arr){
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - 1 - i; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    swapItems(arr, j, j + 1);
-                }
-            }
-        }
+        quickSort(arr, 0, arr.length - 1);
     }
 
     private boolean binarySearch(Integer [] arr, Integer item){
@@ -171,5 +165,42 @@ throw new StorageIsFullException();
             }
         }
         return false;
+    }
+
+    private void grow(){
+        storage = Array.copyOf(storage, size + size / 2);
+    }
+
+    private void quickSort(Integer[] arr, int begin, int end){
+if (begin < end){
+    if (paritionIndex = parition(arr, begin, end)){
+        quickSort(arr, begin, end: paritionIndex - 1);
+        quickSort(arr, begin: paritionIndex + 1,  end);
+    }
+}
+    }
+
+    private void parition(Integer[] arr, int begin, int end){
+
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int i = begin, i < end, i++){
+            if(arr[i]<=pivot){
+                i++;
+
+                swapElements(arr, 1, i);
+            }
+
+            swapElements(arr, 1 + 1, end);
+            return i + 1;
+        }
+    }
+
+    private void swapElements(Integer[] arr, int 11, int 12){
+        int temp = arr[11];
+        arr[11] = arr[12];
+        arr[12] = temp;
+
     }
 }
